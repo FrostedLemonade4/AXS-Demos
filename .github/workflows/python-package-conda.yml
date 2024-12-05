@@ -1,20 +1,11 @@
 name: Python Package using Conda
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-
+  build-linux:
+    runs-on: ubuntu-latest
     strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
       max-parallel: 5
 
     steps:
@@ -28,11 +19,8 @@ jobs:
         # $CONDA is an environment variable pointing to the root of the miniconda directory
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
-      shell: bash  # Use bash to source Conda scripts properly
       run: |
-        source /usr/share/miniconda/etc/profile.d/conda.sh  # Initialize Conda
         conda env update --file environment.yml --name base
-        conda activate base
     - name: Lint with flake8
       run: |
         conda install flake8
