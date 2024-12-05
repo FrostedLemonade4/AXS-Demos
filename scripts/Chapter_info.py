@@ -1,6 +1,6 @@
 def filter_starting_from_alpha(lines):
     """
-    Filters lines to start processing only from the first occurrence of the word 'Alpha'.
+    Filters lines to process from the first occurrence of the word 'Alpha'.
     """
     start_processing = False
     filtered_lines = []
@@ -12,6 +12,7 @@ def filter_starting_from_alpha(lines):
             filtered_lines.append(line)
 
     return filtered_lines
+
 
 def group_lines_until_year(lines):
     """
@@ -42,19 +43,25 @@ def group_lines_until_year(lines):
 
     return grouped_lines
 
-def chapter_map(pdf_path):
 
+def chapter_map(pdf_path):
     State_Map = {
-    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
-    "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia",
-    "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
-    "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland",
-    "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri",
-    "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey",
-    "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio",
-    "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina",
-    "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont",
-    "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming", "D.C.": "District of Columbia", "DC": "District of Columbia"
+        "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
+        "CA": "California", "CO": "Colorado", "CT": "Connecticut",
+        "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii",
+        "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
+        "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine",
+        "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan",
+        "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri",
+        "MT": "Montana", "NE": "Nebraska", "NV": "Nevada",
+        "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico",
+        "NY": "New York", "NC": "North Carolina", "ND": "North Dakota",
+        "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania",
+        "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota",
+        "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont",
+        "VA": "Virginia", "WA": "Washington", "WV": "West Virginia",
+        "WI": "Wisconsin", "WY": "Wyoming",
+        "D.C.": "District of Columbia", "DC": "District of Columbia"
     }
 
     # List to store chapter data
@@ -64,7 +71,7 @@ def chapter_map(pdf_path):
         chapter_count = 0
         first = True
         for page in doc:
-            text_blocks = page.get_text("blocks")  # Get text blocks with positions
+            text_blocks = page.get_text("blocks")
             lines = [block[4] for block in text_blocks]  # Extract text
             if first:
                 lines = filter_starting_from_alpha(lines)
@@ -80,19 +87,18 @@ def chapter_map(pdf_path):
 
                     # Extract chapter name based on chapter count
                     if chapter_count <= 24:
-                        chapter_name = parts[0]  # First word for the first 24 chapters
+                        chapter_name = parts[0]
                     else:
-                        chapter_name = " ".join(parts[:2])  # First two words for all others
+                        chapter_name = " ".join(parts[:2])
 
                     state_abbreviation = parts[-2]
                     state_full_name = State_Map[state_abbreviation]
                     collegiate_chapters[chapter_name] = state_full_name
 
-                
     return collegiate_chapters
 
-def main(pdf_path, directory_path):
 
+def main(pdf_path, directory_path):
     collegiate_chapters = chapter_map(pdf_path)
 
     files = os.listdir(directory_path)
@@ -102,18 +108,17 @@ def main(pdf_path, directory_path):
         name = name.split()
         name = name[1:-1]
         name = " ".join(name)
-        
+
         file_path = os.path.join(directory_path, file_name)
         df = pd.read_csv(file_path)
-        
-        df["Year"] = pd.to_datetime(df['Constituent Specific Attributes Initiation Date Description'], format='%m/%d/%Y').dt.year
+
+        df["Year"] = pd.to_datetime(
+            df['Constituent Specific Attributes Initiation Date Description'],
+            format='%m/%d/%Y').dt.year
         file_year_counts = df['Year'].value_counts()
         year_counts[name] = file_year_counts
 
-       
-    result = pd.DataFrame(year_counts)
     print(collegiate_chapters)
-
 
 
 if __name__ == "__main__":
@@ -122,14 +127,9 @@ if __name__ == "__main__":
     import pandas as pd
 
     # Path to the list of chapters
-    pdf_path = r"initiation_visualization\Chapters-of-Alpha-Chi-Sigma-5-1-2022.pdf"
-
+    pdf_path = (
+        "initiation_visualization\\Chapters-of-Alpha-Chi-Sigma-5-1-2022.pdf"
+    )
     directory_path = r"initiation_visualization\Membership Visualization Data"
 
-
-    
-    
     main(pdf_path, directory_path)
-
-
-
