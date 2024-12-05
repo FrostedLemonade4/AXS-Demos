@@ -4,7 +4,6 @@ channels:
   - https://repo.anaconda.com/pkgs/main
   - https://repo.anaconda.com/pkgs/r
 dependencies:
-<<<<<<< HEAD
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
   - anyio=4.6.2.post1
