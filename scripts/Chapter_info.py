@@ -1,4 +1,3 @@
-import fitz
 def filter_starting_from_alpha(lines):
     """
     Filters lines to start processing only from the first occurrence of the word 'Alpha'.
