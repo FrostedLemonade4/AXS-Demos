@@ -1,0 +1,2 @@
+[flake8]
+exclude = notebooks/snippets, notebooks/.ipynb_checkpoints
