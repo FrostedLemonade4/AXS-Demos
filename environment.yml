@@ -247,3 +247,4 @@ dependencies:
   - zstd=1.5.6
   - pip:
       - pymupdf==1.24.14
+prefix: /home/james/miniconda3/envs/axs_user
