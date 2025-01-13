@@ -1,6 +1,0 @@
-name: axs
-channels:
-  - conda-forge
-  - https://repo.anaconda.com/pkgs/main
-  - https://repo.anaconda.com/pkgs/r
-prefix: /home/james/miniconda3/envs/axs
